@@ -20,7 +20,7 @@ func NewColumn(name string, width int) Column {
 // Currently only supports aligning to centre
 func (c *Column) PrintHeader(output Output) {
 	nameLength := len(c.name)
-	spareRoom := c.width - nameLength
+	spareRoom := c.getWidth() - nameLength
 	leftPadding := strings.Repeat(" ", spareRoom/2)
 	rightPadding := strings.Repeat(" ", spareRoom-(spareRoom/2))
 	output.Print(leftPadding + c.name + rightPadding)
