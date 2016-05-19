@@ -4,6 +4,7 @@ go:
 install:
 - go get github.com/onsi/ginkgo/ginkgo
 - go get github.com/onsi/gomega
+- go get github.com/golang/mock/gomock
 before_install:
   - go get github.com/axw/gocov/gocov
   - go get github.com/mattn/goveralls
