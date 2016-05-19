@@ -12,7 +12,7 @@ var _ = Describe("Output", func() {
 	Describe("OutputStdOut", func() {
 		It("prints to std out", func() {
 			output := OutputStdOut{}
-			output.Print("you should see this in the stdout!")
+			output.Print("you should see this in the stdout")
 		})
 	})
 
