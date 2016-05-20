@@ -9,13 +9,6 @@ import (
 )
 
 var _ = Describe("Output", func() {
-	Describe("OutputStdOut", func() {
-		It("prints to std out", func() {
-			output := OutputStdOut{}
-			output.Print("you should see this in the stdout")
-		})
-	})
-
 	Describe("NullOutput", func() {
 		It("does nothing when printing", func() {
 			output := NullOutput{}
