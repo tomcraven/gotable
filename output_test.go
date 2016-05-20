@@ -10,10 +10,20 @@ import (
 
 var _ = Describe("Output", func() {
 	Describe("NullOutput", func() {
+		var output NullOutput
+
+		BeforeEach(func() {
+			output = NullOutput{}
+		})
+
 		It("does nothing when printing", func() {
-			output := NullOutput{}
 			output.Print("noop")
 		})
+
+		It("does nothing when flushing", func() {
+			output.Flush()
+		})
+	})
 	})
 
 	Describe("OutputBuffered", func() {
