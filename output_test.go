@@ -24,6 +24,21 @@ var _ = Describe("Output", func() {
 			output.Flush()
 		})
 	})
+
+	Describe("OutputStdOut", func() {
+		var output OutputStdOut
+
+		BeforeEach(func() {
+			output = OutputStdOut{}
+		})
+
+		It("prints to stdout", func() {
+			output.Print("test")
+		})
+
+		It("does nothing when flushing", func() {
+			output.Flush()
+		})
 	})
 
 	Describe("OutputBuffered", func() {
