@@ -36,29 +36,21 @@ var _ = Describe("Cell", func() {
 			expectedOutput string
 		}
 
-		printTest := func(configs []printConfiguration) {
-			for _, config := range configs {
-				It("prints the cell correctly", func() {
-					c = NewCell(mockColumn, config.input)
-					mockColumn.EXPECT().GetWidth().Return(config.width)
-					mockOutput.EXPECT().Print(config.expectedOutput)
-					c.Print(mockOutput)
-				})
-			}
+		printTest := func(input interface{}, width int, expectedOutput string) {
+			c = NewCell(mockColumn, input)
+			mockColumn.EXPECT().GetWidth().Return(width)
+			mockOutput.EXPECT().Print(expectedOutput)
+			c.Print(mockOutput)
 		}
 
-		Describe("intCell", func() {
-			printTest([]printConfiguration{
-				{1, 4, "   1"},
-				{1234, 4, "1234"},
-			})
-		})
+		DescribeTable("intCell", printTest,
+			Entry("padded left", 1, 4, "   1"),
+			Entry("not padded", 1234, 4, "1234"),
+		)
 
-		Describe("stringCell", func() {
-			printTest([]printConfiguration{
-				{"hello", 10, "hello     "},
-				{"world", 5, "world"},
-			})
-		})
+		DescribeTable("stringCell", printTest,
+			Entry("padded right", "hello", 10, "hello     "),
+			Entry("no padding", "world", 5, "world"),
+		)
 	})
 })
