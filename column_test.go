@@ -56,4 +56,50 @@ var _ = Describe("Column", func() {
 			})
 		}
 	})
+
+	Describe("push", func() {
+		var (
+			mockController *gomock.Controller
+			mockOutput     *MockOutput
+		)
+
+		BeforeEach(func() {
+			mockController = gomock.NewController(GinkgoT())
+			mockOutput = NewMockOutput(mockController)
+		})
+
+		AfterEach(func() {
+			mockController.Finish()
+		})
+
+		type rowInsert struct {
+			insertCallback func(*Column)
+			expectedOutput string
+		}
+		rowInserts := []rowInsert{
+			{
+				insertCallback: func(c *Column) { c.Push(1) },
+				expectedOutput: "         1",
+			},
+			/*{
+				insertCallback: func(c *Column) { c.Push("hello") },
+				expectedOutput: "hello     ",
+			},*/
+		}
+
+		for _, rowInsert := range rowInserts {
+			Context("when inserting rows into the column", func() {
+				var c Column
+				BeforeEach(func() {
+					c = NewColumn("test", 10)
+				})
+
+				It("prints the header correctly - '"+rowInsert.expectedOutput+"'", func() {
+					mockOutput.EXPECT().Print(rowInsert.expectedOutput)
+					rowInsert.insertCallback(&c)
+					c.PrintCellAt(0, mockOutput)
+				})
+			})
+		}
+	})
 })
