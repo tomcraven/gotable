@@ -1,3 +1,6 @@
-# The command to generate mocks is pretty precise
-# Add any other mockgen commands to this file
-mockgen -source=output.go -destination=gotable_mock/mock_output.go -imports=".=github.com/tomcraven/gotable"
+create_mock() {
+		mockgen -source=$1.go -destination=gotable_mock/mock_$1.go -imports=".=github.com/tomcraven/gotable"
+}
+
+create_mock output
+create_mock column
