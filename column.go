@@ -13,7 +13,7 @@ type Column interface {
 type columnImpl struct {
 	name  string
 	width int
-	cells []cell
+	cells []Cell
 }
 
 // NewColumn instantiates and returns a new instance of Column
@@ -39,12 +39,12 @@ func (c *columnImpl) PrintHeader(output Output) {
 // PrintCellAt takes an ordinal and the output interface and prints the row
 func (c *columnImpl) PrintCellAt(ordinal int, output Output) {
 	// TODO: bounds checking
-	c.cells[ordinal].print(output)
+	c.cells[ordinal].Print(output)
 }
 
 // Push appends an item to the column
 func (c *columnImpl) Push(x interface{}) {
-	c.cells = append(c.cells, newCell(c, x))
+	c.cells = append(c.cells, NewCell(c, x))
 }
 
 func (c *columnImpl) getWidth() int {

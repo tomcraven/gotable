@@ -5,11 +5,13 @@ import (
 	"strings"
 )
 
-type cell interface {
-	print(Output)
+// Cell a single cell in a column/row
+type Cell interface {
+	Print(Output)
 }
 
-func newCell(column Column, x interface{}) cell {
+// New cell creates a new cell based off the input type
+func NewCell(column Column, x interface{}) Cell {
 	switch x.(type) {
 	case int:
 		return intCell{
@@ -36,7 +38,7 @@ type intCell struct {
 	column Column
 }
 
-func (c intCell) print(output Output) {
+func (c intCell) Print(output Output) {
 	str := strconv.Itoa(c.item)
 	output.Print(lPad(str, c.column.getWidth()))
 }
