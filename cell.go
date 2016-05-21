@@ -10,7 +10,7 @@ type Cell interface {
 	Print(Output)
 }
 
-// New cell creates a new cell based off the input type
+// NewCell creates a new cell based off the input type
 func NewCell(column Column, x interface{}) Cell {
 	switch x.(type) {
 	case int:
