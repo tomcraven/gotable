@@ -57,7 +57,7 @@ var _ = Describe("Cell", func() {
 		Describe("stringCell", func() {
 			printTest([]printConfiguration{
 				{"hello", 10, "hello     "},
-				{"world", 7, "world  "},
+				{"world", 5, "world"},
 			})
 		})
 	})
