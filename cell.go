@@ -40,5 +40,5 @@ type intCell struct {
 
 func (c intCell) Print(output Output) {
 	str := strconv.Itoa(c.item)
-	output.Print(lPad(str, c.column.getWidth()))
+	output.Print(lPad(str, c.column.GetWidth()))
 }

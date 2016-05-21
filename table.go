@@ -64,7 +64,7 @@ func (t *Table) printColumnHeaders(output Output) {
 func (t *Table) printHorizontalSeparator(output Output) {
 	output.Print(cornerChar)
 	for _, column := range t.columns {
-		output.Print(strings.Repeat(rowChar, column.getWidth())).
+		output.Print(strings.Repeat(rowChar, column.GetWidth())).
 			Print(cornerChar)
 	}
 	output.Flush()

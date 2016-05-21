@@ -7,7 +7,7 @@ type Column interface {
 	PrintHeader(Output)
 	PrintCellAt(int, Output)
 	Push(interface{})
-	getWidth() int
+	GetWidth() int
 }
 
 type columnImpl struct {
@@ -30,7 +30,7 @@ func (c *columnImpl) PrintHeader(output Output) {
 	// TODO: can this be done with cells?
 
 	nameLength := len(c.name)
-	spareRoom := c.getWidth() - nameLength
+	spareRoom := c.GetWidth() - nameLength
 	leftPadding := strings.Repeat(" ", spareRoom/2)
 	rightPadding := strings.Repeat(" ", spareRoom-(spareRoom/2))
 	output.Print(leftPadding + c.name + rightPadding)
@@ -47,6 +47,6 @@ func (c *columnImpl) Push(x interface{}) {
 	c.cells = append(c.cells, NewCell(c, x))
 }
 
-func (c *columnImpl) getWidth() int {
+func (c *columnImpl) GetWidth() int {
 	return c.width
 }
