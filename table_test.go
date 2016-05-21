@@ -12,8 +12,102 @@ var _ = Describe("Table", func() {
 	})
 
 	Describe("Push", func() {
-		It("pushes a row into the table", func() {
+		type tableConfiguration struct {
+			callback       func(*Table)
+			expectedOutput []string
+		}
 
+		var (
+			t                   Table
+			mockController      *gomock.Controller
+			mockOutput          *MockOutput
+			tableConfigurations []tableConfiguration
+		)
+
+		printTest := func() {
+			BeforeEach(func() {
+				mockController = gomock.NewController(GinkgoT())
+				mockOutput = NewMockOutput(mockController)
+			})
+
+			AfterEach(func() {
+				mockController.Finish()
+			})
+
+			for _, config := range tableConfigurations {
+				It("pushes a row into the table", func() {
+					config.callback(&t)
+					for _, expectedOutput := range config.expectedOutput {
+						mockOutput.EXPECT().Print(expectedOutput)
+					}
+					t.Print(mockOutput)
+				})
+			}
+		}
+
+		Context("when the table has a single column", func() {
+			BeforeEach(func() {
+				t = NewTable([]Column{
+					NewColumn("Test", 4),
+				})
+			})
+
+			tableConfigurations = []tableConfiguration{
+				{
+					callback: func(t *Table) {
+						t.Push(1)
+					},
+					expectedOutput: []string{
+						"+----+",
+						"|Test|",
+						"+----+",
+						"|   1|",
+						"+----+",
+					},
+				},
+				{
+					callback: func(t *Table) {
+						t.Push(42)
+						t.Push(2323)
+					},
+					expectedOutput: []string{
+						"+----+",
+						"|Test|",
+						"+----+",
+						"|  42|",
+						"|2323|",
+						"+----+",
+					},
+				},
+			}
+
+			printTest()
+		})
+
+		Context("when the table has multiple columns", func() {
+			BeforeEach(func() {
+				t = NewTable([]Column{
+					NewColumn("col1", 6),
+					NewColumn("col2", 10),
+				})
+			})
+
+			tableConfigurations = []tableConfiguration{
+				{
+					callback: func(t *Table) {
+						t.Push(1, 2)
+					},
+					expectedOutput: []string{
+						"+------+----------+",
+						"| col1 |   col2   |",
+						"+------+----------+",
+						"|     1|         2|",
+						"+------+----------+",
+					},
+				},
+			}
+
+			printTest()
 		})
 	})
 
@@ -62,6 +156,7 @@ var _ = Describe("Table", func() {
 						"+----+",
 						"|test|",
 						"+----+",
+						"+----+",
 					},
 				},
 				{
@@ -72,6 +167,7 @@ var _ = Describe("Table", func() {
 						"+--------------------+",
 						"|    another test    |",
 						"+--------------------+",
+						"+--------------------+",
 					},
 				},
 				{
@@ -81,6 +177,7 @@ var _ = Describe("Table", func() {
 					expectedOutput: []string{
 						"+---------+",
 						"|test odd |",
+						"+---------+",
 						"+---------+",
 					},
 				},
@@ -100,6 +197,7 @@ var _ = Describe("Table", func() {
 						"+----+----+",
 						"|test|test|",
 						"+----+----+",
+						"+----+----+",
 					},
 				},
 				{
@@ -111,6 +209,7 @@ var _ = Describe("Table", func() {
 					expectedOutput: []string{
 						"+-----+--------------------+-+",
 						"| col |   middle column    |c|",
+						"+-----+--------------------+-+",
 						"+-----+--------------------+-+",
 					},
 				},
