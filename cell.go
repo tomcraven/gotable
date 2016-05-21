@@ -9,12 +9,12 @@ type cell interface {
 	print(Output)
 }
 
-func newCell(column *Column, x interface{}) cell {
+func newCell(column Column, x interface{}) cell {
 	switch x.(type) {
 	case int:
 		return intCell{
-			item:  x.(int),
-			width: column.getWidth(),
+			item:   x.(int),
+			column: column,
 		}
 	default:
 		// TODO: test
@@ -32,11 +32,11 @@ func lPad(str string, width int) string {
 }
 
 type intCell struct {
-	item  int
-	width int
+	item   int
+	column Column
 }
 
 func (c intCell) print(output Output) {
 	str := strconv.Itoa(c.item)
-	output.Print(lPad(str, c.width))
+	output.Print(lPad(str, c.column.getWidth()))
 }

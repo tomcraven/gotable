@@ -73,12 +73,12 @@ var _ = Describe("Column", func() {
 		})
 
 		type rowInsert struct {
-			insertCallback func(*Column)
+			insertCallback func(Column)
 			expectedOutput string
 		}
 		rowInserts := []rowInsert{
 			{
-				insertCallback: func(c *Column) { c.Push(1) },
+				insertCallback: func(c Column) { c.Push(1) },
 				expectedOutput: "         1",
 			},
 			/*{
@@ -96,7 +96,7 @@ var _ = Describe("Column", func() {
 
 				It("prints the header correctly - '"+rowInsert.expectedOutput+"'", func() {
 					mockOutput.EXPECT().Print(rowInsert.expectedOutput)
-					rowInsert.insertCallback(&c)
+					rowInsert.insertCallback(c)
 					c.PrintCellAt(0, mockOutput)
 				})
 			})
