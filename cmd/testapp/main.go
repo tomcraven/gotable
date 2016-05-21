@@ -9,8 +9,19 @@ func main() {
 	})
 
 	t.Push(1, 2)
-	t.Push(123, 45342)
+	t.Push("abc", 123)
+	t.Push("hello", "world")
 
 	output := gotable.OutputStdOut{}
 	t.Print(&output)
+
+	/* Outputs:
+	+----------+--------+
+	|   test   | test2  |
+	+----------+--------+
+	|         1|       2|
+	|abc       |     123|
+	|hello     |world   |
+	+----------+--------+
+	*/
 }
