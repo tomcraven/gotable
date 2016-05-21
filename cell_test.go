@@ -7,6 +7,15 @@ import (
 )
 
 var _ = Describe("Cell", func() {
+	Describe("NewCell", func() {
+		It("panics with unsupported cell formats", func() {
+			type randomType struct{}
+			Expect(func() {
+				NewCell(NewColumn("1", 1), randomType{})
+			}).Should(Panic())
+		})
+	})
+
 	Describe("Print", func() {
 		var (
 			c              Cell
