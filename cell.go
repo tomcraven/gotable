@@ -18,11 +18,20 @@ func NewCell(column Column, x interface{}) Cell {
 			item:   x.(int),
 			column: column,
 		}
+	case string:
+		return stringCell{
+			item:   x.(string),
+			column: column,
+		}
 	default:
 		// TODO: test
 		panic("unsupported format")
 	}
 }
+
+// --------------------
+// Helpers
+// --------------------
 
 func lPad(str string, width int) string {
 	strLen := len(str)
@@ -33,6 +42,19 @@ func lPad(str string, width int) string {
 	return strings.Repeat(" ", width-strLen) + str
 }
 
+func rPad(str string, width int) string {
+	strLen := len(str)
+	if strLen >= width {
+		return str
+	}
+
+	return str + strings.Repeat(" ", width-strLen)
+}
+
+// --------------------
+// Cells
+// --------------------
+
 type intCell struct {
 	item   int
 	column Column
@@ -41,4 +63,15 @@ type intCell struct {
 func (c intCell) Print(output Output) {
 	str := strconv.Itoa(c.item)
 	output.Print(lPad(str, c.column.GetWidth()))
+}
+
+// --------------------
+
+type stringCell struct {
+	item   string
+	column Column
+}
+
+func (c stringCell) Print(output Output) {
+	output.Print(rPad(c.item, c.column.GetWidth()))
 }
