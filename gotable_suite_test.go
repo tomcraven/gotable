@@ -2,6 +2,7 @@ package gotable_test
 
 import (
 	"github.com/onsi/ginkgo"
+	"github.com/onsi/ginkgo/extensions/table"
 	"github.com/onsi/gomega"
 
 	"testing"
@@ -15,6 +16,9 @@ func TestGotable(t *testing.T) {
 // Declarations for Ginkgo DSL
 type Done ginkgo.Done
 type Benchmarker ginkgo.Benchmarker
+
+var DescribeTable = table.DescribeTable
+var Entry = table.Entry
 
 var GinkgoWriter = ginkgo.GinkgoWriter
 var GinkgoParallelNode = ginkgo.GinkgoParallelNode
