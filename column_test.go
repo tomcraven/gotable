@@ -81,10 +81,10 @@ var _ = Describe("Column", func() {
 				insertCallback: func(c Column) { c.Push(1) },
 				expectedOutput: "         1",
 			},
-			/*{
-				insertCallback: func(c *Column) { c.Push("hello") },
+			{
+				insertCallback: func(c Column) { c.Push("hello") },
 				expectedOutput: "hello     ",
-			},*/
+			},
 		}
 
 		for _, rowInsert := range rowInserts {
