@@ -52,5 +52,12 @@ var _ = Describe("Cell", func() {
 			Entry("padded right", "hello", 10, "hello     "),
 			Entry("no padding", "world", 5, "world"),
 		)
+
+		DescribeTable("boolCell", printTest,
+			Entry("padding right true", true, 6, "true  "),
+			Entry("no padding true", true, 4, "true"),
+			Entry("padding right false", false, 10, "false     "),
+			Entry("no padding false", false, 5, "false"),
+		)
 	})
 })
