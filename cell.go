@@ -1,9 +1,6 @@
 package gotable
 
-import (
-	"strconv"
-	"strings"
-)
+import "strconv"
 
 // Cell a single cell in a column/row
 type Cell interface {
@@ -17,21 +14,21 @@ func NewCell(column Column, x interface{}) Cell {
 
 // NewAlignedCell creates a cell with a specified alignment
 // pass 'unset' to use default alignment, or simply call NewCell
-func NewAlignedCell(column Column, x interface{}, align alignment) Cell {
+func NewAlignedCell(column Column, x interface{}, align Alignment) Cell {
 	switch x.(type) {
 	case int:
 		return intCell{
-			baseCell: createBaseCell(column, align, right),
+			baseCell: createBaseCell(column, align, Right),
 			item:     x.(int),
 		}
 	case string:
 		return stringCell{
-			baseCell: createBaseCell(column, align, left),
+			baseCell: createBaseCell(column, align, Left),
 			item:     x.(string),
 		}
 	case bool:
 		return boolCell{
-			baseCell: createBaseCell(column, align, left),
+			baseCell: createBaseCell(column, align, Left),
 			item:     x.(bool),
 		}
 	default:
@@ -39,14 +36,14 @@ func NewAlignedCell(column Column, x interface{}, align alignment) Cell {
 	}
 }
 
-func createBaseCell(c Column, alignment, defaultAlignment alignment) baseCell {
+func createBaseCell(c Column, alignment, defaultAlignment Alignment) baseCell {
 	return baseCell{
 		column:    c,
 		alignment: getAlignment(alignment, defaultAlignment),
 	}
 }
 
-func getAlignment(a, backup alignment) alignment {
+func getAlignment(a, backup Alignment) Alignment {
 	if a == unset {
 		return backup
 	}
@@ -54,68 +51,12 @@ func getAlignment(a, backup alignment) alignment {
 }
 
 // --------------------
-// Cell helpers
-// --------------------
-
-func lPad(str string, width int) string {
-	strLen := len(str)
-	if strLen >= width {
-		return str
-	}
-
-	return strings.Repeat(" ", width-strLen) + str
-}
-
-func rPad(str string, width int) string {
-	strLen := len(str)
-	if strLen >= width {
-		return str
-	}
-
-	return str + strings.Repeat(" ", width-strLen)
-}
-
-func centrePad(str string, width int) string {
-	strLen := len(str)
-	if strLen >= width {
-		return str
-	}
-
-	spareRoom := width - strLen
-	leftPadding := strings.Repeat(" ", spareRoom/2)
-	rightPadding := strings.Repeat(" ", spareRoom-(spareRoom/2))
-	return leftPadding + str + rightPadding
-}
-
-func padForAlignment(str string, width int, a alignment) string {
-	switch a {
-	case left:
-		return rPad(str, width)
-	case right:
-		return lPad(str, width)
-	case centre:
-		return centrePad(str, width)
-	default:
-		panic("unsupported alignment " + strconv.Itoa(int(a)))
-	}
-}
-
-type alignment int
-
-const (
-	unset alignment = iota
-	left
-	right
-	centre
-)
-
-// --------------------
 // Cells
 // --------------------
 
 type baseCell struct {
 	column    Column
-	alignment alignment
+	alignment Alignment
 }
 
 func (c *baseCell) printString(str string, output Output) {

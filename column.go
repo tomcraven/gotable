@@ -19,7 +19,7 @@ func NewColumn(name string, width int) Column {
 	newColumn := &columnImpl{
 		width: width,
 	}
-	newColumn.header = NewAlignedCell(newColumn, name, centre)
+	newColumn.header = NewAlignedCell(newColumn, name, Centre)
 	return newColumn
 }
 
