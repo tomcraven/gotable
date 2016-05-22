@@ -24,7 +24,7 @@ func NewCell(column Column, x interface{}) Cell {
 			column: column,
 		}
 	default:
-		panic("unsupported format")
+		panic("unsupported cell format")
 	}
 }
 
