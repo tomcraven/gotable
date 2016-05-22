@@ -102,6 +102,11 @@ var _ = Describe("Output", func() {
 				expectedOutput: "te",
 			}),
 		)
+
+		It("flushes", func() {
+			output := NewOutputAligned(1, &NullOutput{}, Left)
+			output.Flush()
+		})
 	})
 
 	Describe("OutputBuffered", func() {
