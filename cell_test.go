@@ -38,7 +38,7 @@ var _ = Describe("Cell", func() {
 
 		printTest := func(input interface{}, width int, expectedOutput string) {
 			c = NewCell(mockColumn, input)
-			mockColumn.EXPECT().GetWidth().Return(width)
+			mockColumn.EXPECT().GetWidth().AnyTimes().Return(width)
 			mockOutput.EXPECT().Print(expectedOutput)
 			c.Print(mockOutput)
 		}
@@ -46,11 +46,13 @@ var _ = Describe("Cell", func() {
 		DescribeTable("intCell", printTest,
 			Entry("padded left", 1, 4, "   1"),
 			Entry("not padded", 1234, 4, "1234"),
+			Entry("truncated", 12345, 4, "1234"),
 		)
 
 		DescribeTable("stringCell", printTest,
 			Entry("padded right", "hello", 10, "hello     "),
 			Entry("no padding", "world", 5, "world"),
+			Entry("truncated", "blah", 2, "bl"),
 		)
 
 		DescribeTable("boolCell", printTest,
@@ -58,6 +60,7 @@ var _ = Describe("Cell", func() {
 			Entry("no padding true", true, 4, "true"),
 			Entry("padding right false", false, 10, "false     "),
 			Entry("no padding false", false, 5, "false"),
+			Entry("truncated", true, 3, "tru"),
 		)
 	})
 })
