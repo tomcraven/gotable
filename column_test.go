@@ -1,8 +1,6 @@
 package gotable_test
 
 import (
-	"strconv"
-
 	gomock "github.com/golang/mock/gomock"
 	. "github.com/tomcraven/gotable"
 	. "github.com/tomcraven/gotable/gotable_mock"
@@ -28,33 +26,22 @@ var _ = Describe("Column", func() {
 			mockController.Finish()
 		})
 
-		type headerFormatData struct {
+		type headerFormat struct {
 			name           string
 			width          int
 			expectedHeader string
 		}
-		headerFormats := []headerFormatData{
-			{"test", 4, "test"},
-			{"test", 5, "test "},
-			{"test", 6, " test "},
-			{"a", 5, "  a  "},
-		}
 
-		for _, headerFormat := range headerFormats {
-			Context("when the column's title is '"+headerFormat.name+"'", func() {
-				Context("when the column's width is "+strconv.Itoa(headerFormat.width), func() {
-					var c Column
-					BeforeEach(func() {
-						c = NewColumn(headerFormat.name, headerFormat.width)
-					})
-
-					It("prints the header correctly - '"+headerFormat.expectedHeader+"'", func() {
-						mockOutput.EXPECT().Print(headerFormat.expectedHeader)
-						c.PrintHeader(mockOutput)
-					})
-				})
-			})
-		}
+		DescribeTable("header formats",
+			func(config headerFormat) {
+				mockOutput.EXPECT().Print(config.expectedHeader)
+				c := NewColumn(config.name, config.width)
+				c.PrintHeader(mockOutput)
+			},
+			Entry("no padding", headerFormat{"test", 4, "test"}),
+			Entry("pad right", headerFormat{"test", 5, "test "}),
+			Entry("pad both", headerFormat{"test", 6, " test "}),
+		)
 	})
 
 	Describe("push", func() {
@@ -72,34 +59,29 @@ var _ = Describe("Column", func() {
 			mockController.Finish()
 		})
 
-		type rowInsert struct {
-			insertCallback func(Column)
+		type rowPush struct {
+			item           interface{}
 			expectedOutput string
+			printRowIndex  int
 		}
-		rowInserts := []rowInsert{
-			{
-				insertCallback: func(c Column) { c.Push(1) },
+
+		DescribeTable("different push types",
+			func(config rowPush) {
+				c := NewColumn("test", 10)
+				mockOutput.EXPECT().Print(config.expectedOutput)
+				c.Push(config.item)
+				c.PrintCellAt(config.printRowIndex, mockOutput)
+			},
+			Entry("int", rowPush{
+				item:           1,
 				expectedOutput: "         1",
-			},
-			{
-				insertCallback: func(c Column) { c.Push("hello") },
+				printRowIndex:  0,
+			}),
+			Entry("string", rowPush{
+				item:           "hello",
 				expectedOutput: "hello     ",
-			},
-		}
-
-		for _, rowInsert := range rowInserts {
-			Context("when inserting rows into the column", func() {
-				var c Column
-				BeforeEach(func() {
-					c = NewColumn("test", 10)
-				})
-
-				It("prints the header correctly - '"+rowInsert.expectedOutput+"'", func() {
-					mockOutput.EXPECT().Print(rowInsert.expectedOutput)
-					rowInsert.insertCallback(c)
-					c.PrintCellAt(0, mockOutput)
-				})
-			})
-		}
+				printRowIndex:  0,
+			}),
+		)
 	})
 })
