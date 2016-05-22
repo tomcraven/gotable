@@ -29,6 +29,11 @@ func NewAlignedCell(column Column, x interface{}, align alignment) Cell {
 			baseCell: createBaseCell(column, align, left),
 			item:     x.(string),
 		}
+	case bool:
+		return boolCell{
+			baseCell: createBaseCell(column, align, left),
+			item:     x.(bool),
+		}
 	default:
 		panic("unsupported cell format")
 	}
@@ -142,4 +147,17 @@ func (c stringCell) Print(output Output) {
 	c.printString(c.item, output)
 }
 
+// --------------------
+
+type boolCell struct {
+	baseCell
+	item bool
+}
+
+func (c boolCell) Print(output Output) {
+	if c.item {
+		c.printString("true", output)
+	} else {
+		c.printString("false", output)
+	}
 }
