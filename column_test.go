@@ -84,4 +84,20 @@ var _ = Describe("Column", func() {
 			}),
 		)
 	})
+
+	Describe("PrintCellAt", func() {
+		It("panics if the ordinal is too high", func() {
+			Expect(func() {
+				c := NewColumn("test", 1)
+				c.PrintCellAt(0, &NullOutput{}) // nothing inserted
+			}).Should(Panic())
+		})
+
+		It("panics if the ordinal is negative", func() {
+			Expect(func() {
+				c := NewColumn("test", 1)
+				c.PrintCellAt(-1, &NullOutput{})
+			}).Should(Panic())
+		})
+	})
 })

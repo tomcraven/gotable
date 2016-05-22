@@ -38,7 +38,6 @@ func (c *columnImpl) PrintHeader(output Output) {
 
 // PrintCellAt takes an ordinal and the output interface and prints the row
 func (c *columnImpl) PrintCellAt(ordinal int, output Output) {
-	// TODO: bounds checking
 	c.cells[ordinal].Print(output)
 }
 
