@@ -18,31 +18,26 @@ var _ = Describe("Table", func() {
 		}
 
 		var (
-			t                   Table
-			mockController      *gomock.Controller
-			mockOutput          *MockOutput
-			tableConfigurations []tableConfiguration
+			t              Table
+			mockController *gomock.Controller
+			mockOutput     *MockOutput
 		)
 
-		printTest := func() {
-			BeforeEach(func() {
-				mockController = gomock.NewController(GinkgoT())
-				mockOutput = NewMockOutput(mockController)
-			})
+		BeforeEach(func() {
+			mockController = gomock.NewController(GinkgoT())
+			mockOutput = NewMockOutput(mockController)
+		})
 
-			AfterEach(func() {
-				mockController.Finish()
-			})
+		AfterEach(func() {
+			mockController.Finish()
+		})
 
-			for _, config := range tableConfigurations {
-				It("pushes a row into the table", func() {
-					config.callback(&t)
-					for _, expectedOutput := range config.expectedOutput {
-						mockOutput.EXPECT().Print(expectedOutput)
-					}
-					t.Print(mockOutput)
-				})
+		printTest := func(config tableConfiguration) {
+			config.callback(&t)
+			for _, expectedOutput := range config.expectedOutput {
+				mockOutput.EXPECT().Print(expectedOutput)
 			}
+			t.Print(mockOutput)
 		}
 
 		Context("when the table has a single column", func() {
@@ -52,8 +47,8 @@ var _ = Describe("Table", func() {
 				})
 			})
 
-			tableConfigurations = []tableConfiguration{
-				{
+			DescribeTable("pushes a row into the table", printTest,
+				Entry("single row", tableConfiguration{
 					callback: func(t *Table) {
 						t.Push(1)
 					},
@@ -64,8 +59,8 @@ var _ = Describe("Table", func() {
 						"|   1|",
 						"+----+",
 					},
-				},
-				{
+				}),
+				Entry("multiple rows", tableConfiguration{
 					callback: func(t *Table) {
 						t.Push(42)
 						t.Push(2323)
@@ -78,13 +73,12 @@ var _ = Describe("Table", func() {
 						"|2323|",
 						"+----+",
 					},
-				},
-			}
-
-			printTest()
+				}),
+			)
 		})
 
 		Context("when the table has multiple columns", func() {
+
 			BeforeEach(func() {
 				t = NewTable([]Column{
 					NewColumn("col1", 6),
@@ -92,8 +86,8 @@ var _ = Describe("Table", func() {
 				})
 			})
 
-			tableConfigurations = []tableConfiguration{
-				{
+			DescribeTable("pushes a row into the table", printTest,
+				Entry("single row", tableConfiguration{
 					callback: func(t *Table) {
 						t.Push(1, 2)
 					},
@@ -104,10 +98,22 @@ var _ = Describe("Table", func() {
 						"|     1|         2|",
 						"+------+----------+",
 					},
-				},
-			}
-
-			printTest()
+				}),
+				Entry("multiple rows", tableConfiguration{
+					callback: func(t *Table) {
+						t.Push(42, 23)
+						t.Push(1234, 1234567)
+					},
+					expectedOutput: []string{
+						"+------+----------+",
+						"| col1 |   col2   |",
+						"+------+----------+",
+						"|    42|        23|",
+						"|  1234|   1234567|",
+						"+------+----------+",
+					},
+				}),
+			)
 		})
 	})
 
