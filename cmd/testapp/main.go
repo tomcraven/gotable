@@ -8,9 +8,9 @@ func main() {
 		gotable.NewColumn("test2", 8),
 	})
 
-	t.Push(1, 2)
-	t.Push("abc", 123)
+	t.Push(23, 42)
 	t.Push("hello", "world")
+	t.Push(true, false)
 
 	output := gotable.OutputStdOut{}
 	t.Print(&output)
@@ -19,9 +19,9 @@ func main() {
 	+----------+--------+
 	|   test   | test2  |
 	+----------+--------+
-	|         1|       2|
-	|abc       |     123|
+	|        23|      42|
 	|hello     |world   |
+	|true      |false   |
 	+----------+--------+
 	*/
 }
