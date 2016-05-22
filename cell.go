@@ -21,22 +21,23 @@ func NewAlignedCell(column Column, x interface{}, align alignment) Cell {
 	switch x.(type) {
 	case int:
 		return intCell{
-			baseCell: baseCell{
-				column:    column,
-				alignment: getAlignment(align, right),
-			},
-			item: x.(int),
+			baseCell: createBaseCell(column, align, right),
+			item:     x.(int),
 		}
 	case string:
 		return stringCell{
-			baseCell: baseCell{
-				column:    column,
-				alignment: getAlignment(align, left),
-			},
-			item: x.(string),
+			baseCell: createBaseCell(column, align, left),
+			item:     x.(string),
 		}
 	default:
 		panic("unsupported cell format")
+	}
+}
+
+func createBaseCell(c Column, alignment, defaultAlignment alignment) baseCell {
+	return baseCell{
+		column:    c,
+		alignment: getAlignment(alignment, defaultAlignment),
 	}
 }
 
