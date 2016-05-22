@@ -60,9 +60,8 @@ type baseCell struct {
 }
 
 func (c *baseCell) printString(str string, output Output) {
-	output.Print(
-		padForAlignment(str, c.column.GetWidth(), c.alignment),
-	)
+	outputAligned := NewOutputAligned(c.column.GetWidth(), output, c.alignment)
+	outputAligned.Print(str)
 }
 
 // --------------------
