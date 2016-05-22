@@ -89,10 +89,9 @@ func padForAlignment(str string, width int, a alignment) string {
 		return lPad(str, width)
 	case centre:
 		return centrePad(str, width)
+	default:
+		panic("unsupported alignment " + strconv.Itoa(int(a)))
 	}
-
-	// Should not reach here but add a default return value anyway
-	return centrePad(str, width)
 }
 
 type alignment int
