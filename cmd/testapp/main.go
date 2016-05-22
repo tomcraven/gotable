@@ -12,8 +12,7 @@ func main() {
 	t.Push("hello", "world")
 	t.Push(true, false)
 
-	output := gotable.OutputStdOut{}
-	t.Print(&output)
+	t.Print()
 
 	/* Outputs:
 	+----------+--------+
