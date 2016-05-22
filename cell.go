@@ -113,6 +113,12 @@ type baseCell struct {
 	alignment alignment
 }
 
+func (c *baseCell) printString(str string, output Output) {
+	output.Print(
+		padForAlignment(str, c.column.GetWidth(), c.alignment),
+	)
+}
+
 // --------------------
 
 type intCell struct {
@@ -122,9 +128,7 @@ type intCell struct {
 
 func (c intCell) Print(output Output) {
 	str := strconv.Itoa(c.item)
-	output.Print(
-		padForAlignment(str, c.column.GetWidth(), c.alignment),
-	)
+	c.printString(str, output)
 }
 
 // --------------------
@@ -135,7 +139,7 @@ type stringCell struct {
 }
 
 func (c stringCell) Print(output Output) {
-	output.Print(
-		padForAlignment(c.item, c.column.GetWidth(), c.alignment),
-	)
+	c.printString(c.item, output)
+}
+
 }
