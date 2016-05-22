@@ -65,3 +65,38 @@ func (o *OutputBuffered) Flush() Output {
 	o.cumulativeOutput = ""
 	return o
 }
+
+// OutputAligned takes an output object and guarantees that when flush is called
+// the data sent to the consumer will be x characters long (by padding or
+// truncating)
+type OutputAligned struct {
+	otherOutput Output
+	fixedWidth  int
+	alignment   Alignment
+}
+
+// NewOutputAligned creates a new OutputAligned
+func NewOutputAligned(fixedWidth int, otherOutput Output, alignment Alignment) OutputAligned {
+	return OutputAligned{
+		otherOutput: otherOutput,
+		fixedWidth:  fixedWidth,
+		alignment:   alignment,
+	}
+}
+
+// Print guarantees that the string has the same length as the width the
+// OutputAligned has been configured with
+func (o *OutputAligned) Print(str string) Output {
+	strlen := len(str)
+	if strlen <= o.fixedWidth {
+		o.otherOutput.Print(padForAlignment(str, o.fixedWidth, o.alignment))
+	} else {
+		o.otherOutput.Print(str[0:o.fixedWidth])
+	}
+	return o
+}
+
+// Flush is a noop in OutputAligned
+func (o *OutputAligned) Flush() Output {
+	return o
+}
