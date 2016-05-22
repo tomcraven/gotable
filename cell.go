@@ -8,7 +8,6 @@ import (
 // Cell a single cell in a column/row
 type Cell interface {
 	Print(Output)
-	SetAlignment(alignment)
 }
 
 // NewCell creates a new cell based off the input type
@@ -112,10 +111,6 @@ const (
 type baseCell struct {
 	column    Column
 	alignment alignment
-}
-
-func (c baseCell) SetAlignment(a alignment) {
-	c.alignment = a
 }
 
 // --------------------
