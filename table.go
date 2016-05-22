@@ -46,8 +46,8 @@ func (t *Table) printHeader(output Output) {
 
 func (t *Table) printColumnHeaders(output Output) {
 	output.Print(columnChar)
-	for _, column := range t.columns {
-		column.PrintHeader(output)
+	for i := range t.columns {
+		t.columns[i].PrintHeader(output)
 		output.Print(columnChar)
 	}
 	output.Flush()
@@ -55,8 +55,8 @@ func (t *Table) printColumnHeaders(output Output) {
 
 func (t *Table) printHorizontalSeparator(output Output) {
 	output.Print(cornerChar)
-	for _, column := range t.columns {
-		output.Print(strings.Repeat(rowChar, column.GetWidth())).
+	for i := range t.columns {
+		output.Print(strings.Repeat(rowChar, t.columns[i].GetWidth())).
 			Print(cornerChar)
 	}
 	output.Flush()
@@ -65,8 +65,8 @@ func (t *Table) printHorizontalSeparator(output Output) {
 func (t *Table) printContent(output Output) {
 	for i := 0; i < t.numRows; i++ {
 		output.Print(columnChar)
-		for _, column := range t.columns {
-			column.PrintCellAt(i, output)
+		for j := range t.columns {
+			t.columns[j].PrintCellAt(i, output)
 			output.Print(columnChar)
 		}
 		output.Flush()
