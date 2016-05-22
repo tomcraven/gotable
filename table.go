@@ -31,7 +31,12 @@ func (t *Table) Push(values ...interface{}) {
 }
 
 // Print outputs the table to the output object
-func (t *Table) Print(output Output) {
+func (t *Table) Print() {
+	t.PrintTo(&OutputStdOut{})
+}
+
+// PrintTo takes an instance of the output interface and prints to it
+func (t *Table) PrintTo(output Output) {
 	outputBuffered := NewOutputBuffered(output)
 	t.printHeader(&outputBuffered)
 	t.printContent(&outputBuffered)

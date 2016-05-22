@@ -37,7 +37,7 @@ var _ = Describe("Table", func() {
 			for _, expectedOutput := range config.expectedOutput {
 				mockOutput.EXPECT().Print(expectedOutput)
 			}
-			t.Print(mockOutput)
+			t.PrintTo(mockOutput)
 		}
 
 		Context("when the table has a single column", func() {
@@ -143,7 +143,7 @@ var _ = Describe("Table", func() {
 					for _, expectedOutput := range tableConfig.expectedOutput {
 						mockOutput.EXPECT().Print(expectedOutput)
 					}
-					t.Print(mockOutput)
+					t.PrintTo(mockOutput)
 				})
 
 				AfterEach(func() {
