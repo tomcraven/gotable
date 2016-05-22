@@ -34,16 +34,8 @@ func (t *Table) Push(values ...interface{}) {
 func (t *Table) Print(output Output) {
 	outputBuffered := NewOutputBuffered(output)
 	t.printHeader(&outputBuffered)
-
-	for i := 0; i < t.numRows; i++ {
-		outputBuffered.Print(columnChar)
-		for _, column := range t.columns {
-			column.PrintCellAt(i, &outputBuffered)
-			outputBuffered.Print(columnChar)
-		}
-		outputBuffered.Flush()
-	}
-	t.printHorizontalSeparator(&outputBuffered)
+	t.printContent(&outputBuffered)
+	t.printFooter(&outputBuffered)
 }
 
 func (t *Table) printHeader(output Output) {
@@ -68,4 +60,19 @@ func (t *Table) printHorizontalSeparator(output Output) {
 			Print(cornerChar)
 	}
 	output.Flush()
+}
+
+func (t *Table) printContent(output Output) {
+	for i := 0; i < t.numRows; i++ {
+		output.Print(columnChar)
+		for _, column := range t.columns {
+			column.PrintCellAt(i, output)
+			output.Print(columnChar)
+		}
+		output.Flush()
+	}
+}
+
+func (t *Table) printFooter(output Output) {
+	t.printHorizontalSeparator(output)
 }
