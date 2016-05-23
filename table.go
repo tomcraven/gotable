@@ -3,9 +3,9 @@ package gotable
 import "strings"
 
 const (
-	columnChar      = "|"
-	rowChar         = "-"
-	cornerChar      = "+"
+	columnChar      = "│"
+	rowChar         = "─"
+	cornerChar      = "┼"
 	columnSeparator = " "
 )
 
