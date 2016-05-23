@@ -12,6 +12,7 @@ func main() {
 	t.Push("hello", "world")
 	t.Push(true, false)
 	t.Push(123456789987654321, "this line is too long")
+	t.Push(23.42, 42.23)
 
 	t.Print()
 
@@ -23,6 +24,7 @@ func main() {
 	|hello     |world   |
 	|true      |false   |
 	|1234567899|this lin|
+	|     23.42|   42.23|
 	+----------+--------+
 	*/
 }
