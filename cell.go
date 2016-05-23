@@ -83,8 +83,7 @@ type intCell struct {
 }
 
 func (c intCell) Print(output Output) {
-	str := strconv.Itoa(c.item)
-	c.printString(str, output)
+	c.printString(strconv.Itoa(c.item), output)
 }
 
 // --------------------
