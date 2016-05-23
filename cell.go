@@ -31,8 +31,19 @@ func NewAlignedCell(column Column, x interface{}, align Alignment) Cell {
 			baseCell: createBaseCell(column, align, Left),
 			item:     x.(bool),
 		}
+	case float32:
+		return createFloatCell(float64(x.(float32)), column, align)
+	case float64:
+		return createFloatCell(x.(float64), column, align)
 	default:
 		panic("unsupported cell format")
+	}
+}
+
+func createFloatCell(x float64, column Column, alignment Alignment) Cell {
+	return floatCell{
+		baseCell: createBaseCell(column, alignment, Right),
+		item:     x,
 	}
 }
 
@@ -100,4 +111,15 @@ func (c boolCell) Print(output Output) {
 	} else {
 		c.printString("false", output)
 	}
+}
+
+// --------------------
+
+type floatCell struct {
+	baseCell
+	item float64
+}
+
+func (c floatCell) Print(output Output) {
+	c.printString(strconv.FormatFloat(c.item, 'f', -1, 64), output)
 }

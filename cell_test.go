@@ -62,5 +62,15 @@ var _ = Describe("Cell", func() {
 			Entry("no padding false", false, 5, "false"),
 			Entry("truncated", true, 3, "tru"),
 		)
+
+		// Floats are tricky to test, a float32(1.1) looks like this on my machine:
+		//   1.100000023841858
+		// Where as a float64(1.1) looks like this:
+		//   1.1
+		// For now, just test that printing with no padding is working
+		DescribeTable("floatCell", printTest,
+			Entry("padding left float32", float32(1.1), 3, "1.1"),
+			Entry("padding left float64", float64(1.1), 3, "1.1"),
+		)
 	})
 })
