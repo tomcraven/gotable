@@ -3,9 +3,10 @@ package gotable
 import "strings"
 
 const (
-	columnChar = "|"
-	rowChar    = "-"
-	cornerChar = "+"
+	columnChar      = "|"
+	rowChar         = "-"
+	cornerChar      = "+"
+	columnSeparator = " "
 )
 
 // Table holds the table state
@@ -52,8 +53,9 @@ func (t *Table) printHeader(output Output) {
 func (t *Table) printColumnHeaders(output Output) {
 	output.Print(columnChar)
 	for i := range t.columns {
+		output.Print(columnSeparator)
 		t.columns[i].PrintHeader(output)
-		output.Print(columnChar)
+		output.Print(columnSeparator).Print(columnChar)
 	}
 	output.Flush()
 }
@@ -61,7 +63,9 @@ func (t *Table) printColumnHeaders(output Output) {
 func (t *Table) printHorizontalSeparator(output Output) {
 	output.Print(cornerChar)
 	for i := range t.columns {
-		output.Print(strings.Repeat(rowChar, t.columns[i].GetWidth())).
+		output.Print(rowChar).
+			Print(strings.Repeat(rowChar, t.columns[i].GetWidth())).
+			Print(rowChar).
 			Print(cornerChar)
 	}
 	output.Flush()
@@ -71,8 +75,9 @@ func (t *Table) printContent(output Output) {
 	for i := 0; i < t.numRows; i++ {
 		output.Print(columnChar)
 		for j := range t.columns {
+			output.Print(columnSeparator)
 			t.columns[j].PrintCellAt(i, output)
-			output.Print(columnChar)
+			output.Print(columnSeparator).Print(columnChar)
 		}
 		output.Flush()
 	}
