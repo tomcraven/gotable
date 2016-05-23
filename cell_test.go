@@ -6,6 +6,13 @@ import (
 	. "github.com/tomcraven/gotable/gotable_mock"
 )
 
+type testCell struct {
+}
+
+func (c testCell) Print(output Output) {
+	output.Print("test")
+}
+
 var _ = Describe("Cell", func() {
 	Describe("NewCell", func() {
 		It("panics with unsupported cell formats", func() {
@@ -71,6 +78,11 @@ var _ = Describe("Cell", func() {
 		DescribeTable("floatCell", printTest,
 			Entry("padding left float32", float32(1.1), 3, "1.1"),
 			Entry("padding left float64", float64(1.1), 3, "1.1"),
+		)
+
+		DescribeTable("cellCell", printTest,
+			Entry("padding left", &testCell{}, 10, "test      "),
+			Entry("no padding", &testCell{}, 4, "test"),
 		)
 	})
 })

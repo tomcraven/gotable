@@ -35,6 +35,11 @@ func NewAlignedCell(column Column, x interface{}, align Alignment) Cell {
 		return createFloatCell(float64(x.(float32)), column, align)
 	case float64:
 		return createFloatCell(x.(float64), column, align)
+	case Cell:
+		return cellCell{
+			baseCell: createBaseCell(column, align, Left),
+			item:     x.(Cell),
+		}
 	default:
 		panic("unsupported cell format")
 	}
@@ -71,8 +76,12 @@ type baseCell struct {
 }
 
 func (c *baseCell) printString(str string, output Output) {
-	outputAligned := NewOutputAligned(c.column.GetWidth(), output, c.alignment)
-	outputAligned.Print(str)
+	o := c.createOutput(output)
+	o.Print(str)
+}
+
+func (c *baseCell) createOutput(output Output) OutputAligned {
+	return NewOutputAligned(c.column.GetWidth(), output, c.alignment)
 }
 
 // --------------------
@@ -121,4 +130,16 @@ type floatCell struct {
 
 func (c floatCell) Print(output Output) {
 	c.printString(strconv.FormatFloat(c.item, 'f', -1, 64), output)
+}
+
+// --------------------
+
+type cellCell struct {
+	baseCell
+	item Cell
+}
+
+func (c cellCell) Print(output Output) {
+	o := c.createOutput(output)
+	c.item.Print(&o)
 }
