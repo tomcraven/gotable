@@ -2,12 +2,70 @@ package gotable
 
 import "strings"
 
+type asciiChar int
+
 const (
-	columnChar      = "│"
-	rowChar         = "─"
-	cornerChar      = "┼"
-	columnSeparator = " "
+	topLeft asciiChar = iota
+	topRight
+	bottomLeft
+	bottomRight
+
+	tJuncUp
+	tJuncDown
+	tJuncLeft
+	tJuncRight
+
+	column
+	row
+
+	plus
+	space
 )
+
+var charset = map[asciiChar]string{
+	topLeft:     "┌",
+	topRight:    "┐",
+	bottomLeft:  "└",
+	bottomRight: "┘",
+
+	tJuncUp:    "┴",
+	tJuncDown:  "┬",
+	tJuncLeft:  "┤",
+	tJuncRight: "├",
+
+	column: "│",
+	row:    "─",
+	plus:   "┼",
+	space:  " ",
+}
+
+type position int
+
+const (
+	top position = iota
+	middle
+	bottom
+	left
+	right
+)
+
+var positionChar = map[position]map[position]asciiChar{
+	top: map[position]asciiChar{
+		left:   topLeft,
+		middle: tJuncDown,
+		right:  topRight,
+	},
+	middle: map[position]asciiChar{
+		left:   tJuncRight,
+		middle: plus,
+		right:  tJuncLeft,
+	},
+	bottom: map[position]asciiChar{
+		left:   bottomLeft,
+		middle: tJuncUp,
+		right:  bottomRight,
+	},
+}
 
 // Table holds the table state
 type Table struct {
@@ -45,44 +103,53 @@ func (t *Table) PrintTo(output Output) {
 }
 
 func (t *Table) printHeader(output Output) {
-	t.printHorizontalSeparator(output)
+	t.printHorizontalSeparator(output, top)
 	t.printColumnHeaders(output)
-	t.printHorizontalSeparator(output)
+	t.printHorizontalSeparator(output, middle)
 }
 
 func (t *Table) printColumnHeaders(output Output) {
-	output.Print(columnChar)
+	output.Print(charset[column])
 	for i := range t.columns {
-		output.Print(columnSeparator)
+		output.Print(charset[space])
 		t.columns[i].PrintHeader(output)
-		output.Print(columnSeparator).Print(columnChar)
+		output.Print(charset[space]).Print(charset[column])
 	}
 	output.Flush()
 }
 
-func (t *Table) printHorizontalSeparator(output Output) {
-	output.Print(cornerChar)
+func (t *Table) printHorizontalSeparator(output Output, pos position) {
+	leftChar := positionChar[pos][left]
+	middleChar := positionChar[pos][middle]
+	rightChar := positionChar[pos][right]
+
+	output.Print(charset[leftChar])
 	for i := range t.columns {
-		output.Print(rowChar).
-			Print(strings.Repeat(rowChar, t.columns[i].GetWidth())).
-			Print(rowChar).
-			Print(cornerChar)
+		output.Print(charset[row]).
+			Print(strings.Repeat(charset[row], t.columns[i].GetWidth())).
+			Print(charset[row])
+
+		if i == (len(t.columns) - 1) {
+			output.Print(charset[rightChar])
+		} else {
+			output.Print(charset[middleChar])
+		}
 	}
 	output.Flush()
 }
 
 func (t *Table) printContent(output Output) {
 	for i := 0; i < t.numRows; i++ {
-		output.Print(columnChar)
+		output.Print(charset[column])
 		for j := range t.columns {
-			output.Print(columnSeparator)
+			output.Print(charset[space])
 			t.columns[j].PrintCellAt(i, output)
-			output.Print(columnSeparator).Print(columnChar)
+			output.Print(charset[space]).Print(charset[column])
 		}
 		output.Flush()
 	}
 }
 
 func (t *Table) printFooter(output Output) {
-	t.printHorizontalSeparator(output)
+	t.printHorizontalSeparator(output, bottom)
 }
