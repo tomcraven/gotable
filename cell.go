@@ -40,6 +40,11 @@ func NewAlignedCell(column Column, x interface{}, align Alignment) Cell {
 			baseCell: createBaseCell(column, align, Left),
 			item:     x.(Cell),
 		}
+	case nil:
+		return stringCell{
+			baseCell: createBaseCell(column, align, Left),
+			item:     "",
+		}
 	default:
 		panic("unsupported cell format")
 	}

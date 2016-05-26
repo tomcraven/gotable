@@ -51,16 +51,18 @@ func main() {
 	t.Print()
 
 	/* Output:
-┌────────────┬──────────────────────┐
-│    test    │        test2         │
-├────────────┼──────────────────────┤
-│         23 │                   42 │
-│ hello      │ world                │
-│ true       │ false                │
-│ 1234567899 │ this line is too lon │
-│      23.42 │                42.23 │
-│ custom cel │ custom cell          │
-└────────────┴──────────────────────┘
+┌─────────────┬──────────────────────┐
+│  column 1   │       column 2       │
+├─────────────┼──────────────────────┤
+│          23 │                   42 │
+│ hello       │ world                │
+│ true        │ false                │
+│ 12345678998 │ this line is too lon │
+│       23.42 │                42.23 │
+│ custom cell │ custom cell          │
+│ blank right │                      │
+│             │ blank left           │
+└─────────────┴──────────────────────┘
 	*/
 }
 ```

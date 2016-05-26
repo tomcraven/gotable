@@ -84,5 +84,9 @@ var _ = Describe("Cell", func() {
 			Entry("padding left", &testCell{}, 10, "test      "),
 			Entry("no padding", &testCell{}, 4, "test"),
 		)
+
+		DescribeTable("nilCell", printTest,
+			Entry("nil cell", nil, 3, "   "),
+		)
 	})
 })
