@@ -23,7 +23,7 @@ go get github.com/golang/mock/gomock
 
 ### Example
 
-```
+```go
 package main
 
 import "github.com/tomcraven/gotable"
